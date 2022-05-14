@@ -18,6 +18,6 @@ app = flask.Flask(__name__)
 def home():
     id = request.args['id']
     try:
-        return id
+        return df[df['id'] == id].to_dict()
     except KeyError:
         return "Not in the Database"
