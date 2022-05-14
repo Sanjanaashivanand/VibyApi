@@ -16,9 +16,7 @@ app = flask.Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def home():
-    id = request.args['id']
     try:
-        ids = df.index[df['id'] == id].tolist()
-        return df.iloc[ids[0]].to_dict()
+        return df.iloc[0].to_dict()
     except KeyError:
         return "Not in the Database"
