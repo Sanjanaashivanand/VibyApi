@@ -28,7 +28,7 @@ def authorize():
     app_token = tk.request_client_token(CLIENT_ID, CLIENT_SECRET)
     return tk.Spotify(app_token)
 
-spotify = authorize()
+
 
 def getRecommendations(track_id, ref_df, sp, n_recs = 5):
     track_features = sp.track_audio_features(track_id)
@@ -60,6 +60,7 @@ def home():
  
     
     try:
+        spotify = authorize()
         return getRecommendations(track_id = id, ref_df = df, sp = spotify, n_recs = 5)
     except KeyError:
         return "Not in the Database"
