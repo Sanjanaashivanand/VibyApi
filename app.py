@@ -49,7 +49,7 @@ def getRecommendations(track_id, ref_df, sp, n_recs = 5):
             song_details[j] = recs[j][n]
         recommendations.append(song_details)
     
-    return json.dumps(recommendations,indent=4)
+    return recommendations
 
 app = flask.Flask(__name__)
 
