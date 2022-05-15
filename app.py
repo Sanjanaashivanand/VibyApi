@@ -51,6 +51,20 @@ def getRecommendations(track_id, ref_df, sp, n_recs = 5):
     
     return recommendations
 
+def getSongs(sample):
+    recs = df.sample(n=sample).to_dict()
+    songs = []
+    song_id = []
+    for i in recs['id'].keys():
+        song_id.append(i)
+    
+    for n in song_id:
+        song_details = {}
+        for j in recs.keys():
+            song_details[j] = recs[j][n]
+        songs.append(song_details)
+    return songs
+
 
 app = flask.Flask(__name__)
 
@@ -65,4 +79,14 @@ def home():
         return jsonify(getRecommendations(track_id=id, ref_df=df, sp=spotify, n_recs=n_recs))
     except:
         return "Invalid ID"
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    
+    n = int(request.args.get('n',100))
+    
+    try:
+        return jsonify(getSongs(n))
+    except:
+        return "An Error has occured"
     
