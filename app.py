@@ -57,10 +57,9 @@ app = flask.Flask(__name__)
 def home():
     
     id = request.args['id']
-    n_recs = request.args['n_recs']
-    
+ 
     
     try:
-        return getRecommendations(track_id = id, ref_df = df, sp = spotify, n_recs = n_recs)
+        return getRecommendations(track_id = id, ref_df = df, sp = spotify, n_recs = 5)
     except KeyError:
         return "Not in the Database"
