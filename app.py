@@ -11,7 +11,7 @@ from flask import request,jsonify
 import pandas as pd
 import numpy as np
 import tekore as tk
-import flask_cors as CORS
+from flask_cors import CORS
 
 df = pd.read_csv('Dataset.csv')
 df["[val,energy]"] = df[["valence", "energy"]].values.tolist()
