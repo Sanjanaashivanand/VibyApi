@@ -3,3 +3,4 @@ pandas
 gunicorn
 numpy
 tekore
+flask_cors

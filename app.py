@@ -11,8 +11,7 @@ from flask import request,jsonify
 import pandas as pd
 import numpy as np
 import tekore as tk
-import json
-import logging
+import flask_cors as CORS
 
 df = pd.read_csv('Dataset.csv')
 df["[val,energy]"] = df[["valence", "energy"]].values.tolist()
@@ -67,6 +66,7 @@ def getSongs(sample):
 
 
 app = flask.Flask(__name__)
+CORS(app)
 
 @app.route('/', methods=['GET'])
 def home():
