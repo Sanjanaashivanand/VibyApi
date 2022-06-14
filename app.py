@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Created on Sun May 15 02:24:49 2022
-
 @author: sanjanashivanand
 """
 
@@ -13,7 +10,7 @@ import numpy as np
 import tekore as tk
 from flask_cors import CORS
 
-df = pd.read_csv('Dataset.csv')
+df = pd.read_csv('Dataset.csv').fillna("null")
 df["[val,energy]"] = df[["valence", "energy"]].values.tolist()
 
 def distance(p1, p2):
@@ -48,7 +45,7 @@ def getRecommendations(track_id, ref_df, sp, n_recs = 5):
             song_details[j] = recs[j][n]
         recommendations.append(song_details)
     
-    return recommendations
+    return simplejson.dumps(recommendations, ignore_nan = True)
 
 def getSongs(sample):
     recs = df.sample(n=sample).to_dict()
