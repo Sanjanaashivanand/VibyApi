@@ -45,7 +45,7 @@ def getRecommendations(track_id, ref_df, sp, n_recs = 5):
             song_details[j] = recs[j][n]
         recommendations.append(song_details)
     
-    return simplejson.dumps(recommendations, ignore_nan = True)
+    return recommendations
 
 def getSongs(sample):
     recs = df.sample(n=sample).to_dict()
