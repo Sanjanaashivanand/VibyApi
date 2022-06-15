@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import tekore as tk
 from flask_cors import CORS
+import math
 
 df = pd.read_csv('Dataset.csv').fillna("null")
 df["[val,energy]"] = df[["valence", "energy"]].values.tolist()
@@ -33,6 +34,27 @@ def getRecommendations(track_id, ref_df, sp, n_recs = 5):
     ref_df["distances"] = ref_df["[val,energy]"].apply(lambda x: distance(track_moodvec,np.array(x)))
     ref_df_sorted = ref_df.sort_values(by = "distances", ascending = True)
     ref_df_sorted = ref_df_sorted[ref_df_sorted["id"] != track_id]
+    recs = ref_df_sorted.iloc[:n_recs]
+    recommendations = []
+    song_id = []
+    for i in recs['id'].keys():
+        song_id.append(i)
+    
+    for n in song_id:
+        song_details = {}
+        for j in recs.keys():
+            song_details[j] = recs[j][n]
+        recommendations.append(song_details)
+    
+    return recommendations
+
+def RecommendationsbyMood(val,ref_df,n_recs=5):
+    ref_df['distances'] = ref_df['valence'].apply(lambda x: math.sqrt((x-val)**2))
+    
+    if val<=0.6:
+        ref_df_sorted = ref_df.sort_values(by = "distances", ascending=False)
+    else:
+        ref_df_sorted = ref_df.sort_values(by = "distances", ascending=True)
     recs = ref_df_sorted.iloc[:n_recs]
     recommendations = []
     song_id = []
@@ -79,11 +101,19 @@ def home():
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
-    
     n = int(request.args.get('n',100))
     
     try:
         return jsonify(getSongs(n))
     except:
         return "An Error has occured"
-    
+
+@app.route('/getSongsbyMood', methods=['GET'])
+def getSongsbyMood():
+    val = float(request.args['val'])
+    n_recs = int(request.args.get('n_recs',5))
+
+    try:
+        return jsonify(RecommendationsbyMood(val=val, ref_df=df, n_recs=n_recs))
+    except: 
+        return "An error has occured"    
