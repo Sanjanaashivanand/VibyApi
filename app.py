@@ -3,8 +3,9 @@ Created on Sun May 15 02:24:49 2022
 @author: sanjanashivanand
 """
 
+from crypt import methods
 import flask 
-from flask import request,jsonify
+from flask import request,jsonify, Response
 import pandas as pd
 import numpy as np
 import tekore as tk
@@ -117,3 +118,23 @@ def getSongsbyMood():
         return jsonify(RecommendationsbyMood(val=val, ref_df=df, n_recs=n_recs))
     except: 
         return "An error has occured"    
+
+@app.route('/Playlist/Model1', methods=['GET'])
+def getSongsFromM1():
+    mood = request.args['mood'].capitalize()
+    print("MOOD",mood)
+    try:
+        playlist = pd.read_csv('./Models/M1Playlists/' + mood + '.csv').fillna("null")
+        return Response(playlist.to_json(orient="records"), mimetype='application/json')
+    except:
+        return "<h1>No playlist found</h1>"
+
+@app.route('/Playlist/Model2', methods=['GET'])
+def getSongsFromM2():
+    mood = request.args['mood'].capitalize()
+    print("MOOD",mood)
+    try:
+        playlist = pd.read_csv('./Models/M2Playlists/' + mood + '.csv').fillna("null")
+        return Response(playlist.to_json(orient="records"), mimetype='application/json')
+    except:
+        return "<h1>No playlist found</h1>"
